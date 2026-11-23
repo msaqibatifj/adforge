@@ -1,7 +1,10 @@
-"""Run tests.json against a live agent API and print a markdown results table.
-Usage: python scripts/benchmark.py https://your-agent-url [--update-readme]
+"""Run a test-case file against a live agent API and print a markdown results table.
+Usage: python scripts/benchmark.py https://your-agent-url [--update-readme] [--attacks]
+  default    : tests.json (10 behaviour cases), README section BENCH
+  --attacks  : attack_tests.json (5 common attack tests), README section ATTACK
 Each run uses fresh user ids (suffix) so reruns don't collide with earlier data."""
 import json
+import os
 import re
 import sys
 import time
@@ -10,10 +13,14 @@ import httpx
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")   # the summary line has non-ASCII characters; Windows consoles default to cp1252
-base = (sys.argv[1] if len(sys.argv) > 1 else "http://localhost:8000").rstrip("/")
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+args = [a for a in sys.argv[1:] if not a.startswith("--")]
+base = (args[0] if args else "http://localhost:8000").rstrip("/")
+ATTACKS = "--attacks" in sys.argv
+CASES_FILE, MARKER = ("attack_tests.json", "ATTACK") if ATTACKS else ("tests.json", "BENCH")
 suffix = uuid.uuid4().hex[:5]
 # utf-8-sig tolerates a BOM (Windows editors and PowerShell often add one)
-cases = json.load(open(__file__.replace("scripts/benchmark.py", "tests.json").replace("scripts\\benchmark.py", "tests.json"), encoding="utf-8-sig"))
+cases = json.load(open(os.path.join(ROOT, CASES_FILE), encoding="utf-8-sig"))
 
 
 def check(expect, data, status_ok):
@@ -80,8 +87,8 @@ md.append(f"**{passed}/{len(cases)} passed** · p50 latency {p50:.1f}s · p95 {p
 out = "\n".join(md)
 print(out)
 if "--update-readme" in sys.argv:
-    p = __file__.replace("scripts/benchmark.py", "README.md").replace("scripts\\benchmark.py", "README.md")
+    p = os.path.join(ROOT, "README.md")
     s = open(p, encoding="utf-8").read()
-    s = re.sub(r"(<!-- BENCH:START -->).*?(<!-- BENCH:END -->)", lambda m: f"{m.group(1)}\n{out}\n{m.group(2)}", s, flags=re.S)
+    s = re.sub(rf"(<!-- {MARKER}:START -->).*?(<!-- {MARKER}:END -->)", lambda m: f"{m.group(1)}\n{out}\n{m.group(2)}", s, flags=re.S)
     open(p, "w", encoding="utf-8").write(s)
 sys.exit(0 if passed == len(cases) else 1)
