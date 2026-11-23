@@ -1,0 +1,9 @@
+.env
+*.db
+*.db-*
+*.ckpt
+__pycache__/
+.pytest_cache/
+.venv/
+node_modules/
+.vercel/

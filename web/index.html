@@ -1,0 +1,11 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AdForge — your AI ad agency</title><link rel="stylesheet" href="style.css"></head><body>
+<header><div class="logo">Ad<span>Forge</span></div><small>AI ad agency: copy, creatives, A/B tests, results</small><div class="sp"></div>
+<small id="who"></small><button class="ghost" id="switch">Switch account</button><button class="ghost" id="newchat">New chat</button><a class="btn ghost" href="admin.html" style="text-decoration:none">Admin</a></header>
+<main>
+<section class="card"><h3>Chat with your ad agent</h3><div id="log"></div>
+<div class="chips" id="chips"></div>
+<form id="f"><input id="m" placeholder="Describe a product to advertise…" autocomplete="off" maxlength="2000"><button id="send">Send</button></form></section>
+<section class="card"><div class="tabs"><div class="tab on" data-t="camps">Campaigns</div><div class="tab" data-t="mem">What I remember</div></div>
+<div class="pane" id="camps"></div><div class="pane" id="mem" style="display:none"></div></section>
+</main><script src="config.js"></script><script src="app.js"></script></body></html>
