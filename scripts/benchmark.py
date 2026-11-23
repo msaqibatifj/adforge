@@ -8,9 +8,12 @@ import time
 import uuid
 import httpx
 
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")   # the summary line has non-ASCII characters; Windows consoles default to cp1252
 base = (sys.argv[1] if len(sys.argv) > 1 else "http://localhost:8000").rstrip("/")
 suffix = uuid.uuid4().hex[:5]
-cases = json.load(open(__file__.replace("scripts/benchmark.py", "tests.json").replace("scripts\\benchmark.py", "tests.json")))
+# utf-8-sig tolerates a BOM (Windows editors and PowerShell often add one)
+cases = json.load(open(__file__.replace("scripts/benchmark.py", "tests.json").replace("scripts\\benchmark.py", "tests.json"), encoding="utf-8-sig"))
 
 
 def check(expect, data, status_ok):

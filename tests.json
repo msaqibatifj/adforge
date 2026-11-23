@@ -1,4 +1,4 @@
-﻿[
+[
   {"id": 1, "name": "Create campaign + A/B variants", "steps": [
     {"user": "bench_u1", "thread": "t1", "message": "Create a Meta ad campaign for my handmade soy candles. Audience: gift buyers. Tone: cozy.",
      "expect": {"tools_include": ["create_campaign", "save_ad_variants"], "min_variants": 2}}]},
