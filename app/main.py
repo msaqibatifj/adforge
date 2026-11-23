@@ -109,7 +109,10 @@ def chat(req: ChatIn):
 
     cb, turn_id, t0 = UsageCB(), uuid.uuid4().hex, time.time()
     config = {"configurable": {"thread_id": f"{uid}::{tid}", "user_id": uid, "turn_id": turn_id},
-              "callbacks": [cb], "recursion_limit": 16}
+              "callbacks": [cb], "recursion_limit": 16,
+              # LangSmith labels (only used when LANGSMITH_TRACING=true): filter traces by user or conversation
+              "run_name": "adforge_chat", "tags": ["chat"],
+              "metadata": {"user_id": uid, "thread_id": tid, "turn_id": turn_id}}
     outcome, reply, calls = "ok", "", []
     try:
         result = graph.invoke({"messages": [HumanMessage(content=message)]}, config=config)

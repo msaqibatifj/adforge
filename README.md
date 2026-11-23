@@ -64,6 +64,9 @@ Open, no login. `tokens` sums every LLM call in the turn (guard + agent + memory
 
 **Cost control.** Haiku only, `max_tokens=700`, 14-message history window, free regex pre-checks before the classifier, deterministic SVG creatives (no image model), and a global spend kill-switch (`MAX_SPEND_USD`, default $1.70 of the $2 key) logged in Postgres.
 
+## Observability (LangSmith)
+Every `/chat` turn is traced to [LangSmith](https://smith.langchain.com) (project `adforge`): the full graph path (guard → load_memory → copywriter ⇄ tools → memory_writer), each Claude call with prompt, output, tokens and latency, and each tool call with its arguments and result. Traces are named `adforge_chat` and carry `user_id`, `thread_id` and `turn_id` metadata, so you can filter by user or conversation. Tracing is off unless `LANGSMITH_TRACING=true` and `LANGSMITH_API_KEY` are set, it uses no Claude credits, and it is sent in the background so a LangSmith outage never breaks `/chat`.
+
 ## Setup
 
 ```bash
