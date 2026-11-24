@@ -5,7 +5,7 @@ Built with **LangGraph + Claude Haiku (`claude-haiku-5-5`)**, FastAPI, Postgres 
 
 - **Website (customer + admin):** https://adforge-green.vercel.app · admin at https://adforge-green.vercel.app/admin
 - **Agent API:** https://adforge-2lrv.onrender.com → `POST /chat`, `GET /health`
-- **Demo video:** `<VIDEO_URL>`
+- **Demo video:** https://drive.google.com/file/d/1d9pgdam9g2PCN87CQv3DVgY28EN8L5K0/view?usp=sharing
 
 ![demo](docs/demo.gif)
 
